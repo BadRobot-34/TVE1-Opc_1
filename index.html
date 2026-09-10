@@ -1,41 +1,44 @@
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="robots" content="noindex" />
-<link href="/css/skin.css" rel="stylesheet" type="text/css">
-</head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex" />
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; }
+    #player { width: 100%; height: 100%; }
+  </style>
 
-<script src='https://content.jwplatform.com/libraries/KB5zFt7A.js'></script>
-<script> jwplayer.key='XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';</script>
+  <!-- Clappr Core -->
+  <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+  <!-- Shaka Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.3.6/dist/shaka-player.compiled.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.js"></script>
+</head>
+<body>
+
 <div id="player"></div>
-<script type="text/javascript">
-var playerInstance=jwplayer("player");
-playerInstance.setup({
-    playlist: [{
-        title : "",
-        image: "",
-        "sources": [
-            {
-                "default": false,
-                "type": "dash",
-                "file": 'https://requestrouter3.cdn.agiletv.net/__cl/cg:lv-r1/__c/La1_HD/__op/dash-wv/__f/manifest.mpd',
-                "drm": {
-                    "clearkey": {"keyId":"D4ddFD5FTCAtog1ZsmBTKQ", "key":"MqwWzb3XV17UnvyuaWMqDQ"}
-                },
-                "label": "0"
-            }
-        ]
-    }],
-    width: "100%",
-    height: "100%",
-    aspectratio: "",
-    autostart: true,
-    mute: false,      // Audio activado sin silenciar
-    volume: 100,      // Nivel de volumen al máximo (0-100)
-    cast: {},
-    sharing: {}
-});
+
+<script>
+  var player = new Clappr.Player({
+    source: 'https://requestrouter3.cdn.agiletv.net/__cl/cg:lv-r1/__c/La1_HD/__op/dash-wv/__f/manifest.mpd',
+    parentId: '#player',
+    plugins: [DashShakaPlayback],
+    shakaOnBeforeLoad: function(shakaPlayer) {
+      shakaPlayer.configure({
+        drm: {
+          clearKeys: {
+            'D4ddFD5FTCAtog1ZsmBTKQ': 'MqwWzb3XV17UnvyuaWMqDQ'
+          }
+        }
+      });
+    },
+    autoPlay: true,
+    mute: false,  // Audio activado por defecto
+    volume: 100,  // Volumen al 100%
+    width: '100%',
+    height: '100%'
+  });
 </script>
 
-
+</body>
 </html>
